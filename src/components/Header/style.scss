@@ -1,0 +1,22 @@
+@use "../../ui/typography";
+@use "../../ui/color_pallete";
+@use "../../ui/media_breakpoints";
+
+.header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin: 0 2px;
+  padding: 8px;
+  background-color: color_pallete.$celadon;
+  border-radius: 20px;
+  -webkit-box-shadow: 0px 6px 10px 0px color_pallete.$outer_space-shadow;
+  -moz-box-shadow: 0px 6px 10px 0px color_pallete.$outer_space-shadow;
+  box-shadow: 0px 6px 10px 0px color_pallete.$outer_space-shadow;
+
+  &__logo {
+    @include typography.h1;
+    color: color_pallete.$fern_green;
+  }
+}

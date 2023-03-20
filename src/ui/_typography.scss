@@ -1,0 +1,43 @@
+@use "./media_breakpoints";
+
+@mixin h1 {
+  font-size: 32px;
+  font-weight: 700;
+  font-family: "Roboto", sans-serif;
+
+  @media (min-width: media_breakpoints.$md) {
+    font-size: 48px;
+  }
+
+  @media (min-width: media_breakpoints.$xl) {
+    font-size: 56px;
+  }
+}
+
+@mixin h2 {
+  font-size: 24px;
+  font-weight: 700;
+  font-family: "Roboto", sans-serif;
+
+  @media (min-width: media_breakpoints.$md) {
+    font-size: 32px;
+  }
+
+  @media (min-width: media_breakpoints.$xl) {
+    font-size: 48px;
+  }
+}
+
+@mixin h3 {
+  font-size: 18px;
+  font-weight: 700;
+  font-family: "Roboto", sans-serif;
+
+  @media (min-width: media_breakpoints.$md) {
+    font-size: 24px;
+  }
+
+  @media (min-width: media_breakpoints.$xl) {
+    font-size: 32px;
+  }
+}

@@ -1,0 +1,22 @@
+@use "./ui/media_breakpoints";
+
+.app {
+  display: flex;
+  flex-direction: column;
+
+  max-width: 100%;
+  min-height: 100vh;
+  margin: 0 auto;
+
+  @media (min-width: media_breakpoints.$md) {
+    max-width: 95%;
+  }
+
+  @media (min-width: media_breakpoints.$xl) {
+    max-width: 85%;
+  }
+
+  .content {
+    flex: 1;
+  }
+}
