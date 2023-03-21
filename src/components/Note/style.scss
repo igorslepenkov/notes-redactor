@@ -1,0 +1,119 @@
+@use "../../ui/typography";
+@use "../../ui/color_pallete";
+
+.note {
+  display: grid;
+  grid-template-areas:
+    "title title title"
+    "description description description"
+    "tags tags tags"
+    ". . created"
+    "edit . delete";
+  gap: 20px;
+  width: 100%;
+  margin: 0 10px;
+
+  &__title {
+    grid-area: title;
+    @include typography.h1;
+    color: color_pallete.$fern_green;
+  }
+
+  &__description {
+    grid-area: description;
+    @include typography.h3;
+    color: color_pallete.$outer_space;
+  }
+
+  &__tags-list {
+    grid-area: tags;
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    gap: 10px;
+    list-style: none;
+
+    .tags-heading {
+      @include typography.body1;
+      color: color_pallete.$outer_space;
+    }
+
+    .tag-item {
+      @include typography.body2;
+      color: color_pallete.$outer_space;
+    }
+  }
+
+  &__created-at {
+    grid-area: created;
+    @include typography.body2;
+    color: color_pallete.$outer_space;
+  }
+
+  &__button {
+    width: 100%;
+    padding: 0 25px;
+    margin: 5px;
+    @include typography.body1;
+    color: color_pallete.$mint;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+
+    &--edit {
+      grid-area: edit;
+      background-color: color_pallete.$warning;
+
+      &:hover {
+        background-color: color_pallete.$warning-hover;
+      }
+
+      &:active {
+        background-color: color_pallete.$warning;
+      }
+    }
+
+    &--delete {
+      grid-area: delete;
+      background-color: color_pallete.$danger;
+
+      &:hover {
+        background-color: color_pallete.$danger-hover;
+      }
+
+      &:active {
+        background-color: color_pallete.$danger;
+      }
+    }
+  }
+}
+
+.list-item {
+  grid-template-areas:
+    "title title edit"
+    "tags tags delete"
+    "created . .";
+  gap: 5px;
+  width: inherit;
+  border-bottom: 1px solid color_pallete.$outer_space;
+  cursor: pointer;
+
+  .note__title {
+    @include typography.body1;
+  }
+
+  .note__description {
+    display: none;
+  }
+
+  .note__tags-list {
+    .tags-heading {
+      @include typography.body2;
+    }
+  }
+
+  .note__button {
+    padding: 0 5px;
+    @include typography.body2;
+  }
+}

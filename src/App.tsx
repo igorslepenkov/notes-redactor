@@ -3,7 +3,7 @@ import "./style.scss";
 import { Outlet } from "react-router-dom";
 import { Footer, Header } from "./components";
 
-function App() {
+export const App = () => {
   return (
     <div className="app">
       <Header />
@@ -15,6 +15,4 @@ function App() {
       <Footer />
     </div>
   );
-}
-
-export default App;
+};

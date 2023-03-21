@@ -6,7 +6,7 @@ enum LocalStorageEndpoint {
 }
 
 interface IGetLocalStorageItemOptions<Type> {
-  where: Partial<Type>;
+  where?: Partial<Type>;
 }
 
 class LocalStorageService {
@@ -59,6 +59,21 @@ class LocalStorageService {
     }
 
     throw new Error("Notes are not set");
+  };
+
+  public getFirstNote = (
+    options: IGetLocalStorageItemOptions<INote>
+  ): INote | null => {
+    const getResult = this.get<INote>(LocalStorageEndpoint.Notes, options);
+    if (getResult && !Array.isArray(getResult)) {
+      return getResult;
+    }
+
+    if (Array.isArray(getResult)) {
+      return getResult[0];
+    }
+
+    return null;
   };
 }
 

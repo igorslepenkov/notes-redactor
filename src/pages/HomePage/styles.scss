@@ -1,0 +1,69 @@
+@use "../../ui/color_pallete";
+@use "../../ui/typography";
+@use "../../ui/media_breakpoints";
+
+.home-page {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &__wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+
+    @media (min-width: media_breakpoints.$md) {
+      display: grid;
+      grid-template-columns: auto auto;
+      grid-template-rows: 7fr 1fr;
+      align-items: normal;
+      height: 70vh;
+    }
+  }
+
+  &__add-btn {
+    grid-row: 2 / 3;
+    margin: 10px;
+    padding: 20px;
+    border: none;
+    background-color: color_pallete.$fern_green;
+    border-radius: 20px;
+    @include typography.body1;
+    color: color_pallete.$mint;
+    cursor: pointer;
+
+    &:hover {
+      background-color: color_pallete.$fern_green-hover;
+    }
+
+    &:active {
+      background-color: color_pallete.$fern_green;
+    }
+
+    @media (min-width: media_breakpoints.$md) {
+      padding: 0;
+    }
+  }
+
+  &__dashboard {
+    grid-row: 1 / 3;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 90vw;
+    padding: 20px;
+    border: 1px solid color_pallete.$outer_space;
+    border-radius: 20px;
+
+    @media (min-width: media_breakpoints.$md) {
+      width: 500px;
+    }
+
+    @media (min-width: media_breakpoints.$lg) {
+      width: 700px;
+    }
+  }
+}
