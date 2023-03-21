@@ -91,8 +91,7 @@
 .list-item {
   grid-template-areas:
     "title title edit"
-    "tags tags delete"
-    "created . .";
+    "created created delete";
   gap: 5px;
   width: inherit;
   border-bottom: 1px solid color_pallete.$outer_space;
@@ -107,9 +106,7 @@
   }
 
   .note__tags-list {
-    .tags-heading {
-      @include typography.body2;
-    }
+    display: none;
   }
 
   .note__button {
