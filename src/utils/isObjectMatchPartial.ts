@@ -12,14 +12,14 @@ export const isObjectMatchPartial = <Type>(
       const areTagsIncluded = optionsValue.some((item) =>
         objValue.includes(item)
       );
-      areTagsIncluded ? null : (result = false);
+      !areTagsIncluded && (result = false);
     } else if (
       typeof objValue === "object" &&
       typeof optionsValue === "object"
     ) {
       const areEqual =
         JSON.stringify(objValue) === JSON.stringify(optionsValue);
-      areEqual ? null : (result = false);
+      !areEqual && (result = false);
     } else {
       if (object[key] !== options[key]) {
         result = false;
