@@ -67,3 +67,35 @@
     }
   }
 }
+
+.home-page--nothing {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .home-page__title {
+    @include typography.h2;
+    color: color_pallete.$outer-space;
+  }
+
+  .home-page__add-btn {
+    margin: 10px;
+    padding: 20px;
+    border: none;
+    background-color: color_pallete.$fern_green;
+    border-radius: 20px;
+    @include typography.body1;
+    color: color_pallete.$mint;
+    cursor: pointer;
+
+    &:hover {
+      background-color: color_pallete.$fern_green-hover;
+    }
+
+    &:active {
+      background-color: color_pallete.$fern_green;
+    }
+  }
+}

@@ -1,13 +1,31 @@
 import { INote } from "../types";
 import { isObjectMatchPartial } from "../utils";
 
-enum LocalStorageEndpoint {
+export enum LocalStorageEndpoint {
   Notes = "notes",
 }
 
-interface IGetLocalStorageItemOptions<Type> {
+export interface IGetLocalStorageItemOptions<Type> {
   where?: Partial<Type>;
 }
+
+export const generateLocalStorageEventsTriggers = (
+  key: LocalStorageEndpoint
+) => {
+  const setEventName = `${key}-set`;
+  const clearEventName = `${key}-clear`;
+
+  const setEvent = new Event(setEventName);
+  const clearEvent = new Event(clearEventName);
+
+  const setTrigger = () => {
+    window.dispatchEvent(setEvent);
+  };
+
+  const clearTrigger = () => window.dispatchEvent(clearEvent);
+
+  return { setTrigger, setEventName, clearTrigger, clearEventName };
+};
 
 class LocalStorageService {
   private static _instance: LocalStorageService | null = null;
@@ -22,7 +40,7 @@ class LocalStorageService {
     return LocalStorageService._instance;
   }
 
-  private get<Type>(
+  public get<Type>(
     key: LocalStorageEndpoint,
     options?: IGetLocalStorageItemOptions<Type>
   ): Type | Type[] | null {
@@ -40,8 +58,12 @@ class LocalStorageService {
     );
   }
 
-  private set<Type>(key: LocalStorageEndpoint, value: Type | Type[]): boolean {
+  public set<Type>(key: LocalStorageEndpoint, value: Type | Type[]): boolean {
     localStorage.setItem(key, JSON.stringify(value));
+
+    const { setTrigger } = generateLocalStorageEventsTriggers(key);
+    setTrigger();
+
     return true;
   }
 
@@ -58,7 +80,7 @@ class LocalStorageService {
       return getResult;
     }
 
-    throw new Error("Notes are not set");
+    return null;
   };
 
   public getFirstNote = (

@@ -1,0 +1,104 @@
+@use "../../ui/color_pallete";
+@use "../../ui/typography";
+@use "../../ui/media_breakpoints";
+
+.add-note-form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+
+  &__form-control {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__label {
+    margin: 10px 0;
+    @include typography.h2;
+    color: color_pallete.$outer-space;
+  }
+
+  &__input {
+    @include typography.body1;
+    color: color_pallete.$fern-green;
+    outline: none;
+    border: 1px solid color_pallete.$outer-space;
+    border-radius: 20px;
+    padding: 10px;
+  }
+
+  &__interactive-textarea {
+    position: relative;
+
+    .interactive-textarea__description-wrapper {
+      position: absolute;
+      top: 0;
+      left: 0;
+      border-radius: 20px;
+      padding: 10px;
+      @include typography.body1;
+      color: color_pallete.$fern-green;
+      z-index: 100;
+    }
+
+    .interactive-textarea__textarea {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      padding: 10px;
+      background-color: transparent;
+      @include typography.body1;
+      color: transparent;
+      border: 1px solid color_pallete.$outer-space;
+      border-radius: 20px;
+      caret-color: color_pallete.$outer-space;
+    }
+  }
+
+  &__tags {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    gap: 10px;
+    margin: 10px 0;
+    @include typography.body1;
+    color: color_pallete.$outer-space;
+
+    .tag {
+      @include typography.body2;
+      color: color_pallete.$fern_green-hover;
+      text-decoration: underline;
+    }
+  }
+
+  &__error {
+    @include typography.body1;
+    color: color_pallete.$danger;
+  }
+
+  &__submit-btn {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: color_pallete.$fern-green;
+    border: none;
+    border-radius: 30px;
+    @include typography.body1;
+    color: color_pallete.$mint;
+    cursor: pointer;
+
+    &:hover {
+      background-color: color_pallete.$fern-green-hover;
+    }
+
+    &:active {
+      background-color: color_pallete.$fern-green;
+    }
+  }
+}
+
+.flex-1 {
+  flex-grow: 1;
+}
