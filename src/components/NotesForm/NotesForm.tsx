@@ -54,7 +54,7 @@ export const NotesForm = () => {
   ): ReactNode => {
     if (description) {
       const areOtherWordsMatch = tags.some(
-        (tag) => !!description?.match(new RegExp(`[^>#]${tag}[^<]`, "gim"))
+        (tag) => !!description?.match(new RegExp(`(\\b${tag}\\b)`, "gim"))
       );
       const matches = description.match(tagRegExp);
 
@@ -72,7 +72,7 @@ export const NotesForm = () => {
       if (areOtherWordsMatch) {
         tags.forEach((tag) => {
           description = description?.replace(
-            new RegExp(`([^>#_]${tag}[^<"])`, "gim"),
+            new RegExp(`(\\b${tag}\\b)`, "gim"),
             `<span className="interactive-textarea__hashtag">$1</span>`
           );
         });
