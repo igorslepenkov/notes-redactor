@@ -2,7 +2,6 @@ import "./style.scss";
 
 import { ReactNode, useEffect, useState } from "react";
 import {
-  Path,
   resolvePath,
   useNavigate,
   useParams,
@@ -48,7 +47,7 @@ const NoteWrapper = ({ wrap, children, link }: IWrapperProps) => {
 };
 
 export const Note = ({ note, listItem = false }: IProps) => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [, setSearchParams] = useSearchParams();
 
   const setFilterParam = (tag: string) => {
     setSearchParams({ filter: tag });
