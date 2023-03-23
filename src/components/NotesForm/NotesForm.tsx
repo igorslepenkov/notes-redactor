@@ -72,7 +72,7 @@ export const NotesForm = () => {
       if (areOtherWordsMatch) {
         tags.forEach((tag) => {
           description = description?.replace(
-            new RegExp(`([^>#]${tag}[^<])`, "gim"),
+            new RegExp(`([^>#_]${tag}[^<"])`, "gim"),
             `<span className="interactive-textarea__hashtag">$1</span>`
           );
         });
