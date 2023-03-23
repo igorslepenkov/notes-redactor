@@ -1,3 +1,3 @@
 export const removeHashFromHashtag = (hashtag: string) => {
-  return hashtag.replace(/#/, "");
+  return hashtag.replace(/#/, "").trim().toLowerCase();
 };

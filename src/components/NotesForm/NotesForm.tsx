@@ -9,6 +9,7 @@ import { notesRepository } from "../../repositories";
 import { LocalStorageEndpoint } from "../../services";
 import { resolvePath, useLocation, useNavigate, useParams } from "react-router";
 import { ROUTE } from "../../router";
+import { useSearchParams } from "react-router-dom";
 
 interface IFormFields {
   title: string;
@@ -17,6 +18,7 @@ interface IFormFields {
 
 export const NotesForm = () => {
   const location = useLocation();
+  const [, setSearchParams] = useSearchParams();
 
   const { note_id } = useParams();
 
@@ -51,6 +53,9 @@ export const NotesForm = () => {
     description: string | undefined
   ): ReactNode => {
     if (description) {
+      const areOtherWordsMatch = tags.some(
+        (tag) => !!description?.match(new RegExp(`[^>#]${tag}[^<]`, "gim"))
+      );
       const matches = description.match(tagRegExp);
 
       if (matches) {
@@ -58,9 +63,18 @@ export const NotesForm = () => {
           if (description) {
             description = description.replace(
               match,
-              `<a href="#">${match}</a>`
+              `<span className="interactive-textarea__hashtag">${match}</span>`
             );
           }
+        });
+      }
+
+      if (areOtherWordsMatch) {
+        tags.forEach((tag) => {
+          description = description?.replace(
+            new RegExp(`([^>#]${tag}[^<])`, "gim"),
+            `<span className="interactive-textarea__hashtag">$1</span>`
+          );
         });
       }
 
@@ -86,7 +100,6 @@ export const NotesForm = () => {
     if (note_id) {
       const note = notesRepository.getOne({ where: { id: note_id } });
       if (note) {
-        console.log("Set data");
         setValue("title", note.title);
         setValue("description", note.description);
       }
@@ -181,9 +194,13 @@ export const NotesForm = () => {
           Tags:
           {tags &&
             tags.map((tag) => (
-              <a key={tag} className="tag">
+              <button
+                key={tag}
+                className="tag"
+                onClick={() => setSearchParams({ filter: tag })}
+              >
                 {tag}
-              </a>
+              </button>
             ))}
         </p>
 

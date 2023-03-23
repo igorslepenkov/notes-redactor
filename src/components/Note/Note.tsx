@@ -1,7 +1,13 @@
 import "./style.scss";
 
 import { ReactNode, useEffect, useState } from "react";
-import { Path, resolvePath, useNavigate, useParams } from "react-router-dom";
+import {
+  Path,
+  resolvePath,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import { INote } from "../../types";
 import { ROUTE } from "../../router";
 import { createDinamicUrlString } from "../../utils";
@@ -16,14 +22,18 @@ interface IProps {
 
 interface IWrapperProps {
   wrap: boolean;
-  link: string | Path;
+  link: string;
   children: ReactNode;
 }
 
 const NoteWrapper = ({ wrap, children, link }: IWrapperProps) => {
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const navigateWithLink = () => {
-    navigate(link);
+    navigate({
+      pathname: link,
+      search: searchParams.toString(),
+    });
   };
 
   if (wrap) {
@@ -38,6 +48,12 @@ const NoteWrapper = ({ wrap, children, link }: IWrapperProps) => {
 };
 
 export const Note = ({ note, listItem = false }: IProps) => {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const setFilterParam = (tag: string) => {
+    setSearchParams({ filter: tag });
+  };
+
   const { setTrigger } = useLocalStorageEvents(LocalStorageEndpoint.Notes);
 
   const navigate = useNavigate();
@@ -91,14 +107,19 @@ export const Note = ({ note, listItem = false }: IProps) => {
     };
 
     return (
-      <NoteWrapper wrap={listItem} link={link}>
+      <NoteWrapper wrap={listItem} link={link.pathname}>
         <h2 className="note__title">{title}</h2>
         <p className="note__description">{description}</p>
         <ul className="note__tags-list">
           <p className="tags-heading">Tags:</p>
           {tags.map((tag) => (
             <li className="tag-item" key={tag}>
-              <a href="#">#{tag}</a>
+              <button
+                className="tag-item__btn"
+                onClick={() => setFilterParam(tag)}
+              >
+                #{tag}
+              </button>
             </li>
           ))}
         </ul>

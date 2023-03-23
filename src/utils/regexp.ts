@@ -1,1 +1,1 @@
-export const tagRegExp = /\s#\w+[^a-z0-9]/gim;
+export const tagRegExp = /#\w+[^a-z0-9]/gim;

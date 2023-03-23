@@ -40,6 +40,20 @@
     .tag-item {
       @include typography.body2;
       color: color_pallete.$outer_space;
+
+      &__btn {
+        padding: 3px;
+        @include typography.body2;
+        color: color_pallete.$wisteria;
+        background-color: transparent;
+        border: 1px solid color_pallete.$wisteria;
+        border-radius: 10px;
+        cursor: pointer;
+
+        &:hover {
+          color: color_pallete.$tropical-indigo;
+        }
+      }
     }
   }
 

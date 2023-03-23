@@ -24,6 +24,15 @@
     }
   }
 
+  &__search {
+    padding: 20px;
+    @include typography.body1;
+    color: color_pallete.$outer_space;
+    outline: none;
+    border: 1px solid color_pallete.$outer-space;
+    border-radius: 20px;
+  }
+
   &__add-btn {
     grid-row: 2 / 3;
     margin: 10px;

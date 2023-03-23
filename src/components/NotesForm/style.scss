@@ -56,6 +56,11 @@
       border-radius: 20px;
       caret-color: color_pallete.$outer-space;
     }
+
+    .interactive-textarea__hashtag {
+      @include typography.body1;
+      color: color_pallete.$tropical-indigo;
+    }
   }
 
   &__tags {
@@ -69,8 +74,15 @@
 
     .tag {
       @include typography.body2;
-      color: color_pallete.$fern_green-hover;
+      color: color_pallete.$wisteria;
       text-decoration: underline;
+      border: none;
+      background-color: transparent;
+      cursor: pointer;
+
+      &:hover {
+        color: color_pallete.$tropical-indigo;
+      }
     }
   }
 
