@@ -11,7 +11,7 @@ export const NotesList = ({ notes }: IProps) => {
   return (
     <section className="notes-list">
       {notes.map((note) => (
-        <Note key={note.id} note={note} listItem />
+        <Note key={note.title} note={note} listItem />
       ))}
     </section>
   );

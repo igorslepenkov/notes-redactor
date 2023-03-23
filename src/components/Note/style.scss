@@ -8,9 +8,8 @@
     "description description description"
     "tags tags tags"
     ". . created"
-    "edit . delete";
+    "buttons buttons buttons";
   gap: 20px;
-  width: 100%;
   margin: 0 10px;
 
   &__title {
@@ -50,8 +49,15 @@
     color: color_pallete.$outer_space;
   }
 
+  &__buttons {
+    grid-area: buttons;
+    display: flex;
+    flex-direction: row;
+  }
+
   &__button {
     width: 100%;
+    height: fit-content;
     padding: 0 25px;
     margin: 5px;
     @include typography.body1;
@@ -61,7 +67,6 @@
     cursor: pointer;
 
     &--edit {
-      grid-area: edit;
       background-color: color_pallete.$warning;
 
       &:hover {
@@ -74,7 +79,6 @@
     }
 
     &--delete {
-      grid-area: delete;
       background-color: color_pallete.$danger;
 
       &:hover {
@@ -90,10 +94,10 @@
 
 .list-item {
   grid-template-areas:
-    "title title edit"
-    "created created delete";
+    "title title buttons"
+    "created created buttons";
   gap: 5px;
-  width: inherit;
+  min-width: fit-content;
   border-bottom: 1px solid color_pallete.$outer_space;
   cursor: pointer;
 
@@ -107,6 +111,10 @@
 
   .note__tags-list {
     display: none;
+  }
+
+  .note__buttons {
+    flex-direction: column;
   }
 
   .note__button {

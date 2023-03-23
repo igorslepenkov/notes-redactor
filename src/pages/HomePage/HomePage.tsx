@@ -1,5 +1,6 @@
 import "./styles.scss";
 
+import { useEffect, useState } from "react";
 import { Outlet, resolvePath, useNavigate } from "react-router-dom";
 import { NotesList } from "../../components";
 import { LocalStorageEndpoint } from "../../services";
@@ -14,16 +15,24 @@ export const HomePage = () => {
     navigate(resolvePath(ROUTE.AddNewNote, ROUTE.Home));
   };
 
+  const [notesToRender, setNotesToRender] = useState<INote[]>([]);
+
   const { value: notes } = useLocalStorageState<INote>(
     LocalStorageEndpoint.Notes,
     notesRepository,
     ValueType.Multiple
   );
 
+  useEffect(() => {
+    if (notes && Array.isArray(notes)) {
+      setNotesToRender(notes);
+    }
+  }, [notes]);
+
   return (
     <div className="home-page">
       <div className="home-page__wrapper">
-        {notes && Array.isArray(notes) && <NotesList notes={notes} />}
+        {notes && Array.isArray(notes) && <NotesList notes={notesToRender} />}
         <section className="home-page__dashboard">
           <Outlet />
         </section>

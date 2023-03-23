@@ -9,24 +9,6 @@ export interface IGetLocalStorageItemOptions<Type> {
   where?: Partial<Type>;
 }
 
-export const generateLocalStorageEventsTriggers = (
-  key: LocalStorageEndpoint
-) => {
-  const setEventName = `${key}-set`;
-  const clearEventName = `${key}-clear`;
-
-  const setEvent = new Event(setEventName);
-  const clearEvent = new Event(clearEventName);
-
-  const setTrigger = () => {
-    window.dispatchEvent(setEvent);
-  };
-
-  const clearTrigger = () => window.dispatchEvent(clearEvent);
-
-  return { setTrigger, setEventName, clearTrigger, clearEventName };
-};
-
 class LocalStorageService {
   private static _instance: LocalStorageService | null = null;
 
@@ -60,9 +42,6 @@ class LocalStorageService {
 
   public set<Type>(key: LocalStorageEndpoint, value: Type | Type[]): boolean {
     localStorage.setItem(key, JSON.stringify(value));
-
-    const { setTrigger } = generateLocalStorageEventsTriggers(key);
-    setTrigger();
 
     return true;
   }

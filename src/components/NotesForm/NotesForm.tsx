@@ -2,29 +2,35 @@ import "./style.scss";
 
 import { useRef, useEffect, useState, ReactNode } from "react";
 import { useForm } from "react-hook-form";
-import { useDebounce } from "../../hooks";
+import { useDebounce, useLocalStorageEvents } from "../../hooks";
 import parse from "html-react-parser";
 import { removeHashFromHashtag, tagRegExp } from "../../utils";
+import { notesRepository } from "../../repositories";
+import { LocalStorageEndpoint } from "../../services";
+import { resolvePath, useLocation, useNavigate, useParams } from "react-router";
+import { ROUTE } from "../../router";
 
 interface IFormFields {
   title: string;
   description: string;
 }
 
-export const AddNewNoteForm = () => {
+export const NotesForm = () => {
+  const location = useLocation();
+
+  const { note_id } = useParams();
+
+  const { setTrigger } = useLocalStorageEvents(LocalStorageEndpoint.Notes);
+
   const [tags, setTags] = useState<string[]>([]);
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
     reset,
     watch,
   } = useForm<IFormFields>();
-  register("description", {
-    required: "Please enter your description",
-    minLength: 3,
-    maxLength: 50,
-  });
 
   const labelRef = useRef<HTMLLabelElement>(null);
 
@@ -62,12 +68,30 @@ export const AddNewNoteForm = () => {
     }
   };
 
+  const navigate = useNavigate();
+
   const onSubmit = (data: IFormFields) => {
-    console.log(data);
-    console.log(tags);
-    // notesRepository.create({ ...data, tags });
+    if (note_id) {
+      notesRepository.update(note_id, { ...data, tags });
+    } else {
+      notesRepository.create({ ...data, tags });
+    }
+
+    setTrigger();
     reset();
+    navigate(ROUTE.Home);
   };
+
+  useEffect(() => {
+    if (note_id) {
+      const note = notesRepository.getOne({ where: { id: note_id } });
+      if (note) {
+        console.log("Set data");
+        setValue("title", note.title);
+        setValue("description", note.description);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     if (
@@ -80,34 +104,57 @@ export const AddNewNoteForm = () => {
     }
   }, [debouncedDescriptionValue]);
 
+  useEffect(() => {
+    if (
+      location.pathname === resolvePath(ROUTE.AddNewNote, ROUTE.Home).pathname
+    ) {
+      reset();
+    }
+
+    if (note_id) {
+      const note = notesRepository.getOne({ where: { id: note_id } });
+      if (note) {
+        setValue("title", note.title);
+        setValue("description", note.description);
+      }
+    }
+  }, [location.pathname]);
+
   return (
-    <form className="add-note-form" onSubmit={handleSubmit(onSubmit)}>
-      <section className="add-note-form__form-control">
-        <label htmlFor="title" className="add-note-form__label">
+    <form className="notes-form" onSubmit={handleSubmit(onSubmit)}>
+      <section className="notes-form__form-control">
+        <label htmlFor="title" className="notes-form__label">
           Title
         </label>
         <input
           id="title"
           type="text"
           placeholder="Enter title"
-          className="add-note-form__input"
+          className="notes-form__input"
           {...register("title", {
             required: "Please enter your title",
-            minLength: 3,
-            maxLength: 50,
+            minLength: {
+              value: 3,
+              message:
+                "Your description has to be at least 3 characters length",
+            },
+            maxLength: {
+              value: 50,
+              message: "Your title should not be over 50 characters length",
+            },
           })}
         />
         {errors.title && (
-          <p className="add-note-form__error">{errors.title.message}</p>
+          <p className="notes-form__error">{errors.title.message}</p>
         )}
       </section>
 
-      <section className="add-note-form__form-control flex-1">
-        <label htmlFor="description" className="add-note-form__label">
+      <section className="notes-form__form-control flex-1">
+        <label htmlFor="description" className="notes-form__label">
           Description
         </label>
 
-        <div className="add-note-form__interactive-textarea flex-1">
+        <div className="notes-form__interactive-textarea flex-1">
           <label
             htmlFor="description"
             className="interactive-textarea__description-wrapper flex-1"
@@ -121,13 +168,16 @@ export const AddNewNoteForm = () => {
             className="interactive-textarea__textarea"
             {...register("description", {
               required: "Please enter your description",
-              minLength: 3,
-              maxLength: 50,
+              minLength: {
+                value: 3,
+                message:
+                  "Your description has to be at least 3 characters length",
+              },
             })}
           />
         </div>
 
-        <p className="add-note-form__tags">
+        <p className="notes-form__tags">
           Tags:
           {tags &&
             tags.map((tag) => (
@@ -138,11 +188,11 @@ export const AddNewNoteForm = () => {
         </p>
 
         {errors.description && (
-          <p className="add-note-form__error">{errors.description.message}</p>
+          <p className="notes-form__error">{errors.description.message}</p>
         )}
       </section>
 
-      <button className="add-note-form__submit-btn" type="submit">
+      <button className="notes-form__submit-btn" type="submit">
         Submit
       </button>
     </form>

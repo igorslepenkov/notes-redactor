@@ -5,7 +5,9 @@ import { Path, resolvePath, useNavigate, useParams } from "react-router-dom";
 import { INote } from "../../types";
 import { ROUTE } from "../../router";
 import { createDinamicUrlString } from "../../utils";
-import { localStorageService } from "../../services";
+import { LocalStorageEndpoint, localStorageService } from "../../services";
+import { notesRepository } from "../../repositories";
+import { useLocalStorageEvents } from "../../hooks";
 
 interface IProps {
   note?: INote;
@@ -36,9 +38,21 @@ const NoteWrapper = ({ wrap, children, link }: IWrapperProps) => {
 };
 
 export const Note = ({ note, listItem = false }: IProps) => {
+  const { setTrigger } = useLocalStorageEvents(LocalStorageEndpoint.Notes);
+
+  const navigate = useNavigate();
   const [currentNote, setCurrentNote] = useState<INote | null>(null);
 
   const { note_id } = useParams();
+
+  const deleteNote: React.MouseEventHandler<HTMLButtonElement> = (event) => {
+    event.stopPropagation();
+    if (currentNote) {
+      notesRepository.delete(currentNote.id);
+      setTrigger();
+      navigate(ROUTE.Home);
+    }
+  };
 
   useEffect(() => {
     if (note_id && !note) {
@@ -63,6 +77,19 @@ export const Note = ({ note, listItem = false }: IProps) => {
       createDinamicUrlString(ROUTE.Note, { note_id: id }),
       ROUTE.Home
     );
+
+    const navigateToEdit: React.MouseEventHandler<HTMLButtonElement> = (
+      event
+    ) => {
+      event.stopPropagation();
+      navigate(
+        resolvePath(
+          createDinamicUrlString(ROUTE.EditNote, { note_id: currentNote.id }),
+          ROUTE.Home
+        )
+      );
+    };
+
     return (
       <NoteWrapper wrap={listItem} link={link}>
         <h2 className="note__title">{title}</h2>
@@ -78,8 +105,20 @@ export const Note = ({ note, listItem = false }: IProps) => {
         <p className="note__created-at">
           Created: {new Date(createdAt).toLocaleDateString()}
         </p>
-        <button className="note__button note__button--edit">Edit</button>
-        <button className="note__button note__button--delete">Delete</button>
+        <section className="note__buttons">
+          <button
+            className="note__button note__button--edit"
+            onClick={navigateToEdit}
+          >
+            Edit
+          </button>
+          <button
+            className="note__button note__button--delete"
+            onClick={deleteNote}
+          >
+            Delete
+          </button>
+        </section>
       </NoteWrapper>
     );
   }

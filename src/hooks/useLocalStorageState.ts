@@ -1,10 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Repository } from "../repositories";
-import {
-  generateLocalStorageEventsTriggers,
-  LocalStorageEndpoint,
-  localStorageService,
-} from "../services";
+import { LocalStorageEndpoint, localStorageService } from "../services";
+import { useLocalStorageEvents } from "./useLocalStorageEvents";
 
 interface IUseLocalStorageStateReturn<Type> {
   value: Type | Type[] | null;
@@ -33,7 +30,7 @@ export const useLocalStorageState = <Type>(
   const [value, setValue] = useState<Type | Type[] | null>(null);
 
   const { setTrigger, clearEventName, clearTrigger, setEventName } =
-    generateLocalStorageEventsTriggers(key);
+    useLocalStorageEvents(key);
 
   const fetchData = useCallback(() => {
     const saved = fetchValue();
@@ -60,7 +57,7 @@ export const useLocalStorageState = <Type>(
       window.removeEventListener(setEventName, fetchData);
       window.removeEventListener(clearEventName, clearData);
     };
-  }, [fetchData, clearData, key, setEventName, clearEventName]);
+  }, [key, fetchData, setEventName, clearEventName, clearData]);
 
   return { value, setTrigger, clearTrigger };
 };
