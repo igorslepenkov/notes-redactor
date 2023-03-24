@@ -1,15 +1,20 @@
 import "./style.scss";
 
 import { useRef, useEffect, useState, ReactNode } from "react";
+import { useSearchParams } from "react-router-dom";
+import { resolvePath, useLocation, useNavigate, useParams } from "react-router";
 import { useForm } from "react-hook-form";
-import { useDebounce, useLocalStorageEvents } from "../../hooks";
 import parse from "html-react-parser";
-import { removeHashFromHashtag, tagRegExp } from "../../utils";
+
+import { useDebounce, useLocalStorageEvents } from "../../hooks";
+import {
+  regexpWordsMatchingTag,
+  removeHashFromHashtag,
+  tagRegExp,
+} from "../../utils";
 import { notesRepository } from "../../repositories";
 import { LocalStorageEndpoint } from "../../services";
-import { resolvePath, useLocation, useNavigate, useParams } from "react-router";
 import { ROUTE } from "../../router";
-import { useSearchParams } from "react-router-dom";
 
 interface IFormFields {
   title: string;
@@ -54,7 +59,7 @@ export const NotesForm = () => {
   ): ReactNode => {
     if (description) {
       const areOtherWordsMatch = tags.some(
-        (tag) => !!description?.match(new RegExp(`(\\b${tag}\\b)`, "gim"))
+        (tag) => !!description?.match(regexpWordsMatchingTag(tag))
       );
       const matches = description.match(tagRegExp);
 
@@ -72,7 +77,7 @@ export const NotesForm = () => {
       if (areOtherWordsMatch) {
         tags.forEach((tag) => {
           description = description?.replace(
-            new RegExp(`(\\b${tag}\\b)`, "gim"),
+            regexpWordsMatchingTag(tag),
             `<span className="interactive-textarea__hashtag">$1</span>`
           );
         });
